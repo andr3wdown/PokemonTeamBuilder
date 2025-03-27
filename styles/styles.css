@@ -1,0 +1,40 @@
+:root{
+    --background-color: #4e5161;
+    --text-color: #ffffff;
+    --section-color: #3c4057;
+    --content-color: #2c3046;
+    --button-color: #333;
+    --button-hover-color: #666;
+    --card-color: #3c4057;
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+header{
+    background-color: var(--section-color);
+    padding: 10px 0;
+    text-align: center;
+}
+footer{
+    background-color: var(--section-color);
+    padding: 10px 0;
+    text-align: center;
+}
+main{
+    background-color: var(--content-color);
+    padding: 20px;
+    height: auto;
+    flex-grow: 1;
+}
