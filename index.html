@@ -9,7 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles/styles.css">
 
-    <script src="script/api_calls.js" defer></script>
+    <script type="module" src="script/component_imports.js" defer></script>
+    <script type="module" src="script/api_calls.js" defer></script>
     <title>Pokemon Team Builder</title>
 </head>
 <body>
@@ -17,12 +18,7 @@
         <h1>Pokemon Team Builder</h1>
     </header>
     <main>
-        <div class="search-container">
-
-        </div>
-        <div class="team-container">
-
-        </div>
+        <poke-app></poke-app>
     </main>
     <footer>
         Chong Lee © 2025
