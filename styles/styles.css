@@ -7,6 +7,13 @@
     --button-hover-color: #666;
     --card-color: #3c4057;
     --icon-color: #212435;
+    
+    --chart-container-color: #4b4b4b;
+    --chart-background-color: #2c3046;
+    --chart-border-color: #3c4057;
+    --chart-grid-color: #808080;
+    --chart-text-color: #ffffff;
+    --chart-point-color: #ffffff;
 }
 *{
     margin: 0;

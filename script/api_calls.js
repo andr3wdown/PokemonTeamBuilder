@@ -25,7 +25,7 @@ function callApiPromise(url, data = null){
     });
 }
 async function GetTypeRelations(types){
-    
+
 }
 
 export async function GetPokemonData(name, callback){
@@ -40,6 +40,11 @@ export async function GetPokemonData(name, callback){
         delete data.held_items;
         delete data.cries;
         delete data.moves;
+        delete data.base_experience;
+        delete data.location_area_encounters;
+        delete data.sprites.other;
+        delete data.sprites.versions;
+        
         /*
         let species_data = await callApiPromise(data.species.url);
         let evolution_data = await callApiPromise(species_data.evolution_chain.url);

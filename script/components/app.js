@@ -15,7 +15,7 @@ export class App extends HTMLElement{
             <poke-card id="search-card" data-json=""></poke-card>
             <button>AddToTeam</button>
         </div>
-        <div class="team-container">
+        <div class="team-container" id="team-container">
 
         </div>
         `;

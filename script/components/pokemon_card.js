@@ -1,4 +1,6 @@
 import { colors } from "../type-colors.js"
+const Chart = window.Chart;
+
 //define the pokemon card component
 export class PokeCard extends HTMLElement{
     //html template for the pokemon card component
@@ -26,6 +28,10 @@ export class PokeCard extends HTMLElement{
                     </div>
                 `).join("")}
                 <h3>StatTotal: ${data == null ?  "-" : data.stats.reduce((acc, stat) => acc + stat.base_stat, 0)}</h3>
+                
+                <div class="chart-container">
+                    <canvas class="chart"></canvas>
+                </div>
             </div>
         </div>
         `;
@@ -108,7 +114,66 @@ export class PokeCard extends HTMLElement{
             width: 100%;
             height: 40px;
         }
+        .chart{
+            background-color: var(--chart-container-color);
+        }
         `;
+    }
+    buildChart(data){
+        let container = this.shadowRoot.querySelector(".chart");
+        if (!container) return;
+    
+        const chart = new Chart.Chart(container, {
+            type: 'radar',
+            data: {
+                labels: data.stats.map(stat => stat.stat.name.replace("special", "sp")),
+                datasets: [{
+                    label: 'Base Stats',
+                    data: data.stats.map(stat => stat.base_stat),
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)', // Use a semi-transparent color
+                    borderColor: 'rgb(255, 99, 132)',
+                    pointBackgroundColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1,
+                    fill: true // Make sure the area is filled
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 255,
+                        // Lighter grid colors
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.6)'
+                        },
+                        // Lighter angle lines
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.6)',
+                            lineWidth: 1
+                        },
+                        // Customize the tick marks
+                        ticks: {
+                            stepSize: 50,
+                            backdropColor: 'transparent',
+                            showLabelBackdrop: false,
+                            color: '#666',
+                            font: {
+                                size: 10,
+                            }
+                        },
+                        pointLabels: {
+                            font: {
+                                size: 14,
+                                weight: 'bold',
+                                color: 'rgba(255, 255, 255, 0.6)'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        console.log(chart);
+        return chart;
     }
     //observed attributes for the pokemon card component
     static get observedAttributes() {
@@ -131,21 +196,10 @@ export class PokeCard extends HTMLElement{
             let data = JSON.parse(newValue);
             //render the card with the new data
             this.shadowRoot.innerHTML = this.template(data);
+            
+            if (data !== null){
+                this.buildChart(data);
+            }
         }
     }
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
