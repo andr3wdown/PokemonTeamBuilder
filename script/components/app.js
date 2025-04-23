@@ -13,16 +13,22 @@ export class App extends HTMLElement{
             </form>
            
             <poke-card id="search-card" data-json=""></poke-card>
-            <button>AddToTeam</button>
+            <button id="add-button">AddToTeam</button>
         </div>
+        <h3 style="margin-top: 10px; margin-bottom: 10px;">Current Team</h3>
         <div class="team-container" id="team-container">
-
+            
         </div>
         `;
     }
     //css style for the app component
     get style(){
         return /*css*/`
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         .search-container{
             display: flex;
             flex-direction: column;
@@ -42,6 +48,10 @@ export class App extends HTMLElement{
             justify-content: center;
             align-items: center;
         }
+        h1, h2, h3{
+            text-align: center;
+            margin-bottom: 20px;
+        }
         `;
     }
     getData(event){
@@ -60,17 +70,37 @@ export class App extends HTMLElement{
             this.shadowRoot.getElementById('search-card').setAttribute('data-json', JSON.stringify(data));
         });
     }
+    addPokemonToTeam(){
+        let teamContainer = this.shadowRoot.getElementById('team-container');
+        if(teamContainer.children.length >= 6){
+            alert("You can only have 6 pokemon in your team");
+            return;
+        }
+        let data = this.shadowRoot.getElementById('search-card').getAttribute('data-json');
+        if(data == ""){
+            alert("Please search for a pokemon first");
+            return;
+        }
+        this.shadowRoot.getElementById('search-card').setAttribute('data-json', "");
+        let teamCard = teamContainer.appendChild(document.createElement('team-card'));
+        teamCard.setAttribute('data-json', data);
+    }
 
     //constructor for the app component
     constructor(){
         //call the super constructor
         super();
+
         //create a shadow root
         //attach the template to the shadow root
         this.attachShadow({mode: 'open'});
         this.shadowRoot.innerHTML = this.template;
 
+        //add event listeners to the search bar and the add button
         const form = this.shadowRoot.querySelector('.search-header');
         form.addEventListener('submit', (event) => this.getData(event));
+        
+        const addButton = this.shadowRoot.getElementById('add-button');
+        addButton.addEventListener('click', () => this.addPokemonToTeam());
     }
 }
