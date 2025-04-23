@@ -22,15 +22,6 @@ function callApiPromise(url, data = null){
         xhttp.send();
     });
 }
-async function GetTypeRelations(type, callback){
-    try{
-
-    }
-    catch(error){
-        console.log(error);
-    }
-}
-
 export async function GetPokemonData(name, callback){
     try{
         //check if the data is already cached and is not expired
@@ -79,7 +70,7 @@ function cacheData(name, data){
     //create a cache object with the data and the expiry time
     let cache = {
         data: data,
-        expires: time + 1000 * 60 * 60 * 24 //cache for 24 hours
+        expires: time + 1000 * 60 * 60 * 24 * 7 //cache for 1 week
     };
     //set the cache object in local storage with the name of the pokemon as the key
     localStorage.setItem(name, JSON.stringify(cache));

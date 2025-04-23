@@ -13,7 +13,9 @@ export class TeamDisplay extends HTMLElement{
                     <div class="frame">
                         <img class="pokemon-icon" src="${pokemon.sprite}" alt="pokemon-icon">
                     </div>
-                `).join("")}
+                    `).join("")
+                }
+                <button id="delete-team" class="frame"><img class="pokemon-icon" src="../../img/delete.svg"></button>
             </div>
         </div>
         `;
@@ -27,6 +29,11 @@ export class TeamDisplay extends HTMLElement{
         }
         h4{
             margin-bottom: 10px;
+        }
+        button{
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
         }
         .team-display{
             text-align: center;
@@ -57,40 +64,83 @@ export class TeamDisplay extends HTMLElement{
             height: 60px;
 
         }
+        .pokemon-icon{
+            width: 50px;
+            height: 50px;
+            image-rendering: pixelated;
+        }
         `;
     }
     constructor(){
         super();
         this.attachShadow({mode: "open"});
-        let val = {
-            name: "test",
-            pokemons: []
-        }
-        if (val.pokemons.length < 6){
-            for(let i = val.pokemons.length; i < 6; i++){
-                val.pokemons.push({name: "-", sprite: "../../img/question.svg"});
-            }
-        }
-
-        this.shadowRoot.innerHTML = this.template(val);
+        this.deleteClick = this.handleDelete.bind(this);
+        this.showClick = this.handleShow.bind(this);
+        
     }
-
+    handleDelete(event){
+        event.stopPropagation();
+        this.dispatchEvent(new CustomEvent("delete-team", {
+            detail: {
+                name: this.shadowRoot.querySelector("h4").innerText
+            },
+            bubbles: true,
+            composed: true
+        }));
+    }
+    handleShow(event){
+        event.stopPropagation();
+        this.dispatchEvent(new CustomEvent("show-team", {
+            detail: {
+                name: this.shadowRoot.querySelector("h4").innerText
+            },
+            bubbles: true,
+            composed: true
+        }));
+    }
     static get observedAttributes(){
         return ["team"]
     };
-    attrubuteChangedCallback(attrName, oldValue, newValue){
+    attributeChangedCallback(attrName, oldValue, newValue){
         if(attrName === "team"){
+            this.removeEventListeners();
+
             if(newValue === null || newValue === undefined || newValue === ""){
                 this.shadowRoot.innerHTML = this.template(null);
                 return;
             }
             let val = JSON.parse(newValue);
-            if (val.pokemons.lenght < 6){
+            if (val.pokemons.length < 6){
                 for(let i = val.pokemons.length; i < 6; i++){
                     val.pokemons.push({name: "-", sprite: "../../img/question.svg"});
                 }
             }
-            this.shadrowRoot.innerHTML = this.template(val);
+            this.shadowRoot.innerHTML = this.template(val);
+            this.addEventListeners();
+        }
+    }
+    disconnectedCallback(){
+        this.removeEventListeners();
+
+    }
+    removeEventListeners(){
+        const deleteButton = this.shadowRoot.getElementById("delete-team");
+        if (deleteButton) {
+            deleteButton.removeEventListener("click", this.deleteClick);
+        }
+        const teamDisplay = this.shadowRoot.querySelector(".team-display");
+        if (teamDisplay) {
+            teamDisplay.removeEventListener("click", this.showClick);
+        }
+    }
+    addEventListeners(){
+        const deleteButton = this.shadowRoot.getElementById("delete-team");
+        if (deleteButton) {
+            deleteButton.addEventListener("click", this.deleteClick);
+        }
+        const teamDisplay = this.shadowRoot.querySelector(".team-display");
+        if (teamDisplay) {
+            teamDisplay.addEventListener("click", this.showClick);
         }
     }
 }

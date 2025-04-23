@@ -79,9 +79,9 @@ export class TeamsSidebar extends HTMLElement{
     //add a single team to the sidebar
     addTeam(team){
         const teamsContainer = this.shadowRoot.getElementById("teams-container");
-        const teamCard = document.createElement("team-card");
-        teamCard.setAttribute("data-json", JSON.stringify(team));
-        teamsContainer.appendChild(teamCard);
+        const teamDisplay = document.createElement("team-display");
+        teamsContainer.appendChild(teamDisplay);
+        teamDisplay.setAttribute("team", JSON.stringify(team));
         // Save the teams to local storage
         this.teams.push(team);
         localStorage.setItem("teams", JSON.stringify(this.teams));
@@ -92,13 +92,52 @@ export class TeamsSidebar extends HTMLElement{
         teamsContainer.innerHTML = ""; // Clear the container before rendering
 
         teams.forEach((team) => {
-            const teamCard = document.createElement("team-card");
-            teamCard.setAttribute("data-json", JSON.stringify(team));
+            const teamCard = document.createElement("team-display");
+            teamCard.setAttribute("team", JSON.stringify(team));
             teamsContainer.appendChild(teamCard);
         });
         
     }
+    //create a new event for creating a new team from the parent element
+    createTeamEvent(){
+        //get the value of the team name input field
+        //check if the team name is empty
+        const teamName = this.shadowRoot.getElementById("team-name").value;
+        if (teamName == ""){
+            alert("Please enter a team name");
+            return;
+        }
+        //check if the team name already exists¨
+        const teamExists = this.teams.some(team => team.name === teamName);
+        if (teamExists){
+            alert("Team name already exists");
+            return;
+        }
+        //create a new custom event for creating a new team
+        const event = new CustomEvent("create-team", {
+            detail: { name: teamName },
+            bubbles: true,
+            composed: true
+        });
+        //reset the team name input field
+        this.shadowRoot.getElementById("team-name").value = "";
+        //dispatch the event to the parent element (app in this case)
+        this.dispatchEvent(event);
+    }
 
+    static get observedAttributes() {
+        return ['new-team'];
+    }
+    attributeChangedCallback(attrName, oldValue, newValue){
+        if(attrName === "new-team"){
+            if(newValue === null || newValue === undefined || newValue === ""){
+                console.log("team is null or undefined or empty string");
+                return;
+            }
+            let val = JSON.parse(newValue);
+            this.addTeam(val);
+        }
+    }
 
     constructor(){
         super();
@@ -111,30 +150,34 @@ export class TeamsSidebar extends HTMLElement{
         this.renderTeams(this.teams);
 
         //add event listeners to the create team button
-        this.shadowRoot.getElementById("create-team").addEventListener("click", () => {
-            //get the value of the team name input field
-            //check if the team name is empty
-            const teamName = this.shadowRoot.getElementById("team-name").value;
-            if (teamName == ""){
-                alert("Please enter a team name");
-                return;
-            }
-            //check if the team name already exists¨
-            const teamExists = this.teams.some(team => team.name === teamName);
-            if (teamExists){
-                alert("Team name already exists");
-                return;
-            }
-            //create a new custom event for creating a new team
-            const event = new CustomEvent("create-team", {
-                detail: { name: teamName },
+        this.shadowRoot.getElementById("create-team").addEventListener("click", () => { this.createTeamEvent(); });
+
+        //add event listener to delete a team
+        this.addEventListener("delete-team", (event) => {
+            //stop the event from propagating to the parent element
+            event.stopPropagation();
+            //get the value of the team name from the event
+            const teamName = event.detail.name;
+            //remove the team from the teams array
+            this.teams = this.teams.filter(team => team.name !== teamName);
+            //save the teams to local storage
+            localStorage.setItem("teams", JSON.stringify(this.teams));
+            //render the teams to the sidebar
+            this.renderTeams(this.teams);
+        });
+
+        this.addEventListener("show-team", (event) => {
+            //stop the event from propagating to the parent element
+            event.stopPropagation();
+            //get the value of the team name from the event
+            console.log("show-team triggered");
+            const teamName = event.detail.name;
+            //dispatch a custom event to show the team
+            this.dispatchEvent(new CustomEvent("show-selected-team", {
+                detail: { team: this.teams.find(team => team.name === teamName || []) },
                 bubbles: true,
                 composed: true
-            });
-            //reset the team name input field
-            this.shadowRoot.getElementById("team-name").value = "";
-            //dispatch the event to the parent element (app in this case)
-            this.dispatchEvent(event);
+            }));
         });
     }
 

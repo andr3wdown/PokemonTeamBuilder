@@ -1,4 +1,5 @@
 import { colors } from "../type-colors.js"
+import { stat_placeholder } from "../stat_placeholder.js";
 
 //define the pokemon card component
 export class PokeCard extends HTMLElement{
@@ -26,14 +27,23 @@ export class PokeCard extends HTMLElement{
             
             <div class="stats-container">
                 <h3>Base stats</h3>
-                ${data == null ?  "-" : data.stats.map((stat) => /*html*/`
-                    <div class="stat">
-                        <h3 style="z-index:1; padding-left: 10px;">${stat.stat.name}</h3>
-                        <h3 style="z-index:1;">${stat.base_stat}</h3>
-                        <div style="width: ${(stat.base_stat / 255) * 320}px; background-color: green; position: absolute; height: 40px; z-index: 0;"></div>
-                    </div>
-                `).join("")}
-                <h3>StatTotal: ${data == null ?  "-" : data.stats.reduce((acc, stat) => acc + stat.base_stat, 0)}</h3>
+                ${data == null ?
+                    stat_placeholder.map((stat) => /*html*/`
+                        <div class="stat">
+                            <h3 style="z-index:1; padding-left: 10px;">${stat.stat.name}</h3>
+                            <h3 style="z-index:1;">${stat.base_stat}</h3>
+                            <div style="width: ${(stat.base_stat / 255) * 320}px; background-color: green; position: absolute; height: 40px; z-index: 0;"></div>
+                        </div>
+                    `).join("")  
+                    : 
+                    data.stats.map((stat) => /*html*/`
+                        <div class="stat">
+                            <h3 style="z-index:1; padding-left: 10px;">${stat.stat.name}</h3>
+                            <h3 style="z-index:1;">${stat.base_stat}</h3>
+                            <div style="width: ${(stat.base_stat / 255) * 320}px; background-color: green; position: absolute; height: 40px; z-index: 0;"></div>
+                        </div>
+                    `).join("")}
+                <h3>StatTotal: ${data == null ?  "0" : data.stats.reduce((acc, stat) => acc + stat.base_stat, 0)}</h3>
             </div>
         </div>
         `;

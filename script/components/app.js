@@ -7,7 +7,7 @@ export class App extends HTMLElement{
         return /*html*/ `
         <style>${this.style}</style>
         <div class="search-container">
-            <teams-sidebar></teams-sidebar>
+            <teams-sidebar id="sidebar"></teams-sidebar>
             <form class="search-header" action="">
                 <h1>Pokemon Search</h1>
                 <div class="search">
@@ -91,7 +91,54 @@ export class App extends HTMLElement{
         let teamCard = teamContainer.appendChild(document.createElement('team-card'));
         teamCard.setAttribute('data-json', data);
     }
+    createTeam(teamName){
+        //get the team container
+        const teamContainer = this.shadowRoot.getElementById('team-container');
+        //get all the pokemon in the team container
+        const pokemons = teamContainer.children;
+        //check if the team name is empty
+        if (pokemons.length == 0){
+            alert("Please add at least one pokemon to the team");
+            return;
+        }
+        //create a new team object
+        let team = {
+            name: teamName,
+            pokemons: []
+        }
+        //loop through the pokemons and add them to the team object
+        for(let i = 0; i < pokemons.length; i++){
+            let pokemonData = JSON.parse(pokemons[i].getAttribute('data-json'));
+            let pokemon = {
+                name: pokemonData.name,
+                sprite: pokemonData.sprites.front_default
+            }
+            team.pokemons.push(pokemon);
+        }
+        console.log(team);
+        
+        //change the new-team attribute of the teams sidebar
+        this.shadowRoot.getElementById('sidebar').setAttribute('new-team', JSON.stringify(team));
+        //clear the team container
+        teamContainer.innerHTML = "";
+    }
 
+    showTeam(team){
+        //get the team container
+        const teamContainer = this.shadowRoot.getElementById('team-container');
+        //clear the team container
+        teamContainer.innerHTML = "";
+        //loop through the pokemons and add them to the team container
+        for(let i = 0; i < team.length; i++){
+            if (team[i].name == "-"){
+                continue;
+            }
+            GetPokemonData(team[i].name, (data) => {
+                let teamCard = teamContainer.appendChild(document.createElement('team-card'));
+                teamCard.setAttribute('data-json', JSON.stringify(data));
+            });
+        }
+    }
     //constructor for the app component
     constructor(){
         //call the super constructor
@@ -100,15 +147,31 @@ export class App extends HTMLElement{
         //create a shadow root
         //attach the template to the shadow root
         this.attachShadow({mode: 'open'});
+        //render the template to the shadow root
         this.shadowRoot.innerHTML = this.template;
 
-        //add event listeners to the search bar and the add button
+        //add event listeners to the search bar, search buton and the add button
         const form = this.shadowRoot.querySelector('.search-header');
         form.addEventListener('submit', (event) => this.getData(event));
         const searchButton = this.shadowRoot.getElementById('search-button');
         searchButton.addEventListener('click', (event) => this.getData(event));
-
         const addButton = this.shadowRoot.getElementById('add-button');
         addButton.addEventListener('click', () => this.addPokemonToTeam());
+
+        this.addEventListener('create-team', (event) => {
+            //stop the event from propagating to the parent element
+            event.stopPropagation();
+            //get the value of the team name from the event
+            const teamName = event.detail.name;
+            this.createTeam(teamName);
+        });
+
+        this.addEventListener('show-selected-team', (event) => {
+            //stop the event from propagating to the parent element
+            event.stopPropagation();
+            //get the value of the team name from the event
+            const team = event.detail.team;
+            this.showTeam(team.pokemons);
+        });
     }
 }
