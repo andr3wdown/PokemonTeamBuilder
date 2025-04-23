@@ -26,6 +26,7 @@ export class TeamDisplay extends HTMLElement{
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            z-index: 9;
         }
         h4{
             margin-bottom: 10px;
