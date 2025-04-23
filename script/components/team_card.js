@@ -84,7 +84,7 @@ export class TeamCard extends HTMLElement{
             }
         `;
     }
-
+    //define the observed attributes for the custom element
     static get observedAttributes() {
         return ['data-json'];
     }
@@ -111,6 +111,8 @@ export class TeamCard extends HTMLElement{
     }
     //runs when an observed attribute changes
     attributeChangedCallback(name, oldValue, newValue) {
+        //check if the attribute is data-json
+        //if it is, parse the json data and update the template with the data
         if (name === 'data-json') {
             if(newValue == "") {
                 this.shadowRoot.innerHTML = this.template(null);

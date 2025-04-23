@@ -7,6 +7,7 @@ export class App extends HTMLElement{
         return /*html*/ `
         <style>${this.style}</style>
         <div class="search-container">
+            <teams-sidebar></teams-sidebar>
             <form class="search-header" action="">
                 <h1>Pokemon Search</h1>
                 <div class="search">

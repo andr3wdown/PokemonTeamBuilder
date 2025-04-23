@@ -38,6 +38,7 @@ export class PokeCard extends HTMLElement{
         </div>
         `;
     }
+    //css style for the type text in the card
     type_style(type){
         return `
             text-align: center;
@@ -130,6 +131,8 @@ export class PokeCard extends HTMLElement{
     }
     //runs when an observed attribute changes
     attributeChangedCallback(name, oldValue, newValue){
+        //check if the attribute that changed is data-json
+        //if it is, parse the new value to a JSON object and render the card with the new data
         if (name === 'data-json'){
             //if the new value is an empty string, render the card with no data and return
             if(newValue == "") {
