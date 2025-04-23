@@ -128,7 +128,7 @@ export class PokeCard extends HTMLElement{
         super();
         this.attachShadow({mode: 'open'});
     }
-    //function that runs when an observed attribute changes
+    //runs when an observed attribute changes
     attributeChangedCallback(name, oldValue, newValue){
         if (name === 'data-json'){
             //if the new value is an empty string, render the card with no data and return

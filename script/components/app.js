@@ -9,11 +9,16 @@ export class App extends HTMLElement{
         <div class="search-container">
             <form class="search-header" action="">
                 <h1>Pokemon Search</h1>
-                <input type="search" name="" id="search-bar" placeholder="Search for a pokemon" value="">
+                <div class="search">
+                    <input type="search" name="" id="search-bar" placeholder="Search for a pokemon" value="">
+                    <button id="search-button">Search</button>
+                </div>
+                
             </form>
            
             <poke-card id="search-card" data-json=""></poke-card>
-            <button id="add-button">AddToTeam</button>
+            <button id="add-button">Add To Team</button>
+            
         </div>
         <h3 style="margin-top: 10px; margin-bottom: 10px;">Current Team</h3>
         <div class="team-container" id="team-container">
@@ -81,7 +86,7 @@ export class App extends HTMLElement{
             alert("Please search for a pokemon first");
             return;
         }
-        this.shadowRoot.getElementById('search-card').setAttribute('data-json', "");
+        //this.shadowRoot.getElementById('search-card').setAttribute('data-json', "");
         let teamCard = teamContainer.appendChild(document.createElement('team-card'));
         teamCard.setAttribute('data-json', data);
     }
@@ -99,7 +104,9 @@ export class App extends HTMLElement{
         //add event listeners to the search bar and the add button
         const form = this.shadowRoot.querySelector('.search-header');
         form.addEventListener('submit', (event) => this.getData(event));
-        
+        const searchButton = this.shadowRoot.getElementById('search-button');
+        searchButton.addEventListener('click', (event) => this.getData(event));
+
         const addButton = this.shadowRoot.getElementById('add-button');
         addButton.addEventListener('click', () => this.addPokemonToTeam());
     }

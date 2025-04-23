@@ -1,6 +1,7 @@
 import { colors } from "../type-colors.js"
 
 export class TeamCard extends HTMLElement{
+    //html template for the team card component
     template(data){
         return /*html*/ `
         <style>${this.style()}</style>
@@ -19,6 +20,7 @@ export class TeamCard extends HTMLElement{
         </div>
         `;
     }
+    //css style for the type text in the card
     type_style(type){
         return `
             text-align: center;
@@ -29,6 +31,7 @@ export class TeamCard extends HTMLElement{
             border-radius: 5px;
         `;  
     }
+    //css style for the team card component
     style(){
         return /*css*/`
             .team-card{
@@ -85,13 +88,28 @@ export class TeamCard extends HTMLElement{
     static get observedAttributes() {
         return ['data-json'];
     }
-
+    //constructor for the custom element
     constructor(){
         super();
         this.attachShadow({mode: 'open'});
-        this.shadowRoot.innerHTML = this.template();
     }
-
+    //connected and disconnected callbacks for the custom element
+    //these callbacks are called when the element is added or removed from the DOM
+    connectedCallback(){
+        //add event listener for removing the element
+        this.addEventListener('click', this.removeElement);
+    }
+    disconnectedCallback(){
+        //remove event listener for removing the element
+        this.removeEventListener('click', this.removeElement);
+    }
+    //remove the element from the DOM
+    removeElement(){
+        if(this.parentNode){
+            this.parentNode.removeChild(this);
+        }
+    }
+    //runs when an observed attribute changes
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'data-json') {
             if(newValue == "") {

@@ -37,7 +37,6 @@ export async function GetPokemonData(name, callback){
         let data = getCachedData(name);
         //if it is, return the data
         if (data != null){
-            console.log("cached data found for " + name);
             callback(data);
             return;
         }
