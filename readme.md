@@ -36,9 +36,9 @@ Download the source code and serve index.html
 Pokemon Team Builder is completed. New features might be added in the future.
 
 ## Credits
-List of contriubutors and sources you used during the project. Also mention if you used ChatGPT or other AI tools when coding and explain how did you benefit from them.
 - [Chong Lee](https://github.com/andr3wdown)
-- [MDN web docs for Custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements)
+- [MDN web docs for Custom elements](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_custom_elements) this was a great help when using custom html elements
+
 
 ## License
 Example: MIT license @ [Chong Lee](https://github.com/andr3wdown)
