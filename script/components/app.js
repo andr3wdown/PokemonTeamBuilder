@@ -58,6 +58,21 @@ export class App extends HTMLElement{
             text-align: center;
             margin-bottom: 20px;
         }
+        button{
+            border: gray solid 1px;
+            background-color: var(--icon-color);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            padding-inline: 10px;
+            padding-block: 2px;
+            transition: 0.3s;
+        }
+        button:hover{
+            background-color: var(--icon-hover-color);
+            border-radius: 10px;
+            transition: 0.3s;
+        }
         `;
     }
     getData(event){
