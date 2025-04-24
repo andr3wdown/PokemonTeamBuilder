@@ -21,8 +21,8 @@ This was a solo project
 Pokemon team builder is a web-app for building pokemon teams. You can search for pokemon, add them to a team, and save those teams. You can also load your saved teams.
 
 ## Screenshots
-`![Screenshot](https://i.ibb.co/Df84TGkf/Teambuilder.png)`
-`![Screenshot](https://i.ibb.co/k65Thp28/Teambuilder1.png)`
+![Screenshot](https://i.ibb.co/Df84TGkf/Teambuilder.png)
+![Screenshot](https://i.ibb.co/k65Thp28/Teambuilder1.png)
 
 Picture by [Chong Lee](https://github.com/andr3wdown)
 
