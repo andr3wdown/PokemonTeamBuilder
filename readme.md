@@ -1,7 +1,7 @@
 # Pokemon Team Builder by Chong Lee (andr3wdown)
 
 ## Demo link:
-Access my site at [google.com](https://adr3wdownspokemonteambuilder.netlify.app/)
+Access my site at [adr3wdownspokemonteambuilder.netlify.app](https://adr3wdownspokemonteambuilder.netlify.app/)
 
 ## How was the workload divided
 This was a solo project 
