@@ -186,11 +186,10 @@ export class TeamsSidebar extends HTMLElement{
             //stop the event from propagating to the parent element
             event.stopPropagation();
             //get the value of the team name from the event
-            console.log("show-team triggered");
             const teamName = event.detail.name;
             //dispatch a custom event to show the team
             this.dispatchEvent(new CustomEvent("show-selected-team", {
-                detail: { team: this.teams.find(team => team.name === teamName || []) },
+                detail: { team: this.teams.find(team => team.name === teamName) || [] },
                 bubbles: true,
                 composed: true
             }));
