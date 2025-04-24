@@ -72,15 +72,22 @@ export class TeamDisplay extends HTMLElement{
         }
         `;
     }
+    //constructor for the team display component
     constructor(){
         super();
+        //create a shadow root for the component
         this.attachShadow({mode: "open"});
+        //bind the delete function to the class instance
         this.deleteClick = this.handleDelete.bind(this);
+        //bind the show function to the class instance
         this.showClick = this.handleShow.bind(this);
         
     }
+    //handles the delete button click event
     handleDelete(event){
+        //stop the event from propagating to the parent element
         event.stopPropagation();
+        //dispatch a custom event to the parent element with the team name as the detail
         this.dispatchEvent(new CustomEvent("delete-team", {
             detail: {
                 name: this.shadowRoot.querySelector("h4").innerText
@@ -89,8 +96,11 @@ export class TeamDisplay extends HTMLElement{
             composed: true
         }));
     }
+    //handles the show button click event
     handleShow(event){
+        //stop the event from propagating to the parent element
         event.stopPropagation();
+        //dispatch a custom event to the parent element with the team name as the detail
         this.dispatchEvent(new CustomEvent("show-team", {
             detail: {
                 name: this.shadowRoot.querySelector("h4").innerText
@@ -99,31 +109,40 @@ export class TeamDisplay extends HTMLElement{
             composed: true
         }));
     }
+    //observed attributes for the team display component
     static get observedAttributes(){
         return ["team"]
     };
+    //called when the observed attributes change
+    //used to update the teams
     attributeChangedCallback(attrName, oldValue, newValue){
         if(attrName === "team"){
             this.removeEventListeners();
-
+            //check if the new value is null or undefined or empty string
+            //if it is, render the template with null
             if(newValue === null || newValue === undefined || newValue === ""){
                 this.shadowRoot.innerHTML = this.template(null);
                 return;
             }
+            //parse the new value and check if it is valid
+            //if it isn't, render the template with null
             let val = JSON.parse(newValue);
             if (val.pokemons.length < 6){
                 for(let i = val.pokemons.length; i < 6; i++){
                     val.pokemons.push({name: "-", sprite: "../../img/question.svg"});
                 }
             }
+            //render the template with the new value
             this.shadowRoot.innerHTML = this.template(val);
             this.addEventListeners();
         }
     }
+    //called when the element is removed from the DOM
     disconnectedCallback(){
         this.removeEventListeners();
 
     }
+    //helper function for removing event listeners
     removeEventListeners(){
         const deleteButton = this.shadowRoot.getElementById("delete-team");
         if (deleteButton) {
@@ -134,6 +153,7 @@ export class TeamDisplay extends HTMLElement{
             teamDisplay.removeEventListener("click", this.showClick);
         }
     }
+    //helper function for adding event listeners
     addEventListeners(){
         const deleteButton = this.shadowRoot.getElementById("delete-team");
         if (deleteButton) {

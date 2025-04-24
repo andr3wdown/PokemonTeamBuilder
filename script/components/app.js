@@ -75,6 +75,7 @@ export class App extends HTMLElement{
         }
         `;
     }
+    //gets the data from the api and sets the data-json attribute of the pokemon card component
     getData(event){
         event.preventDefault();
         
@@ -91,18 +92,25 @@ export class App extends HTMLElement{
             this.shadowRoot.getElementById('search-card').setAttribute('data-json', JSON.stringify(data));
         });
     }
+    //add the pokemon to the team container
     addPokemonToTeam(){
         let teamContainer = this.shadowRoot.getElementById('team-container');
+        //check if the team container has 6 children
+        //if it does, alert the user and return
         if(teamContainer.children.length >= 6){
             alert("You can only have 6 pokemon in your team");
             return;
         }
+        //get the data-json attribute of the pokemon card component
+        //check if the data-json attribute is empty
+        //if it is, alert the user and return
         let data = this.shadowRoot.getElementById('search-card').getAttribute('data-json');
         if(data == ""){
             alert("Please search for a pokemon first");
             return;
         }
-        //this.shadowRoot.getElementById('search-card').setAttribute('data-json', "");
+        
+        //create a new team card component and set the data-json attribute to the data
         let teamCard = teamContainer.appendChild(document.createElement('team-card'));
         teamCard.setAttribute('data-json', data);
     }

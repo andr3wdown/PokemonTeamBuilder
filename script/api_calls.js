@@ -22,6 +22,9 @@ function callApiPromise(url, data = null){
         xhttp.send();
     });
 }
+//makes a GET request to the PokeAPI to get the data of a specific pokemon
+//and caches the data in local storage with the name of the pokemon as the key and the data and expiry as the value
+//and calls the callback function with the data as an argument
 export async function GetPokemonData(name, callback){
     try{
         //check if the data is already cached and is not expired
