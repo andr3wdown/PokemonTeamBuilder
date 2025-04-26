@@ -41,4 +41,4 @@ Pokemon Team Builder is completed. New features might be added in the future.
 
 
 ## License
-Example: MIT license @ [Chong Lee](https://github.com/andr3wdown)
+MIT license @ [Chong Lee](https://github.com/andr3wdown)
